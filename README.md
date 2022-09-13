@@ -102,4 +102,79 @@ getFoodThoughtsValues()
 
 # Fetch Review
 
-... todo later...
+```javascript
+// Source https://github.com/HackerNews/API#items
+const STORY_URL = "https://hacker-news.firebaseio.com/v0/item/8863.json"
+fetch(STORY_URL)
+    .then((response)=> {
+        return response.json()
+    }).then((storyObject)=> {
+        console.log(storyObject.title)
+        console.log(storyObject.url)
+    })
+
+// Written as an async function
+const getStory = async ()=> {
+    let response = await fetch(STORY_URL)
+    let storyObject = await response.json()
+    console.log(storyObject.title)
+    console.log(storyObject.url)
+}
+getStory()
+```
+
+# Custom Promises Review
+
+```javascript
+const completeHomework = (didDoHomework)=> {
+    return new Promise((resolve, reject)=> {
+        if(didDoHomework) {
+            //  It takes us 3 seconds to do it
+            setTimeout(()=> {
+                resolve("You can go out");
+            }, 3000);
+        } else {
+            // If we didn't do our homework, we'll study
+            reject("You need to study");
+        }
+    });
+}
+
+console.log("Can you go out with friends on Monday?")
+completeHomework(true).then((result)=> {
+    console.log(result);
+});
+// This is a positive result, so we can go out
+// NOTE: We used '.then()' to process positive results
+
+console.log("Can you go out with friends on Tuesday?")
+comepleteHomework(false).catch((result)=> {
+    console.log(result);
+});
+// This is a negative promise result, so we cannot go out :(
+// NOTE: We used '.catch()' to process negative results (catches errors)
+```
+
+# Async and Await Review
+
+```javascript
+let randomDogURL = "https://dog.ceo/api/breeds/image/random";
+
+const getRandomDogPicture = async ()=> {
+    // We await the response of fetch
+    let response = await fetch(randomDogURL);
+    // We use await to parse the body
+    let json_data = await response.json();
+
+    //Take a look at the object
+    console.log(json_data);
+
+    return json_data.message;
+}
+
+// Call the async function in an IIFEso you can use await
+(async function() {
+    let picture = await getRandomDogPicture();
+    document.querySelector("img").src = picture;
+})();
+```
